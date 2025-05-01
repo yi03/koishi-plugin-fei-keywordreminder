@@ -94,6 +94,9 @@ export function apply(ctx: Context) {
             try {
                 await ctx.database.create('keywordRemind', {cid, uid, keyword, botId});
                 await session.bot.sendPrivateMessage(uid, `在 ${cName}(${cid})中，当有人发送了关键词"${keyword}"时，我会提醒你哦~`);
+                if (!keywordTemp[cid]) { // 检查是否存在
+                    keywordTemp[cid] = []; // 不存在则初始化为空数组
+                }
                 keywordTemp[cid].push(keyword);
             }
             catch(err) {
@@ -113,6 +116,9 @@ export function apply(ctx: Context) {
                 try {
                     await ctx.database.create('keywordRemind', {cid, uid, keyword, botId});
                     await session.bot.sendPrivateMessage(uid, `在 ${cName}(${cid})中，当有人发送了关键词"${keyword}"时，我会提醒你哦~`);
+                    if (!keywordTemp[cid]) { // 检查是否存在
+                        keywordTemp[cid] = []; // 不存在则初始化为空数组
+                    }
                     keywordTemp[cid].push(keyword);
                 }
                 catch(err) {
@@ -140,6 +146,9 @@ export function apply(ctx: Context) {
                 const cid = guild.id;
                 if ((await session.bot.getGuildMemberList(guild.id)).data.some(member => member.user.id === uid)) {
                     await ctx.database.upsert('keywordRemind', [{cid, uid, keyword, botId}]);
+                    if (!keywordTemp[cid]) { // 检查是否存在
+                        keywordTemp[cid] = []; // 不存在则初始化为空数组
+                    }
                     keywordTemp[cid].push(keyword);
                 }
             });
